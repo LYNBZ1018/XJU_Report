@@ -1,0 +1,58 @@
+data segment
+    passwd db 'zjyxgb' 
+    n    dw $-passwd
+    buf  db 8 dup(0)
+    cnt  dw 3  
+    errmsg  db 'error!$'     
+    okmsg   db 'Ok$'
+data ends
+
+stack segment
+      dw 128 dup(0)
+stack ends
+
+code segment
+assume cs:code,ds:data
+start: mov ax,data
+       mov ds,ax
+       mov es,ax
+
+f1:    mov bx,0
+      
+f2:    mov ah,7
+	   int 21h
+       cmp al,0dh
+       je  f3
+       mov buf[bx],al
+	   mov dl,'*'
+       mov ah,2
+	   int 21h
+       inc bx
+       cmp bx,6
+       jbe f2
+f3:    cmp bx,n
+       jnz err
+       mov si,offset buf
+       mov di,offset passwd 
+       mov cx,n
+       inc cx
+       repe cmpsb
+       cmp cx,0
+       jnz err
+       lea dx,okmsg
+       mov ah,9
+	   int 21h
+exit:  mov ax,4c00h
+       int 21h
+err:
+	   lea dx,errmsg
+	   mov ah,9
+	   int 21h       
+	   dec cnt
+       jnz f1
+       jmp exit
+
+code ends
+end start
+
+

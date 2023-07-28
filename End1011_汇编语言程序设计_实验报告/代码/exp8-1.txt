@@ -1,0 +1,84 @@
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+array DW 10, -5, 7, 15, -3
+MAX DW ?
+
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+    
+    MOV BX, OFFSET array
+    MOV AX, [BX] ; 将数组的第一个元素存入AX寄存器作为初始最大值
+    
+    ; 使用宏来比较两个数并取得最大值
+    MACRO MAX_VALUE a, b
+        MOV AX, a
+        MOV DX, b
+        CMP AX, DX
+        JG $+6
+        MOV AX, DX
+        MOV a, AX
+    ENDM
+    
+    ; 比较数组中的所有元素
+    MOV CX, 4 ; 数组中的元素个数，4个字
+    ADD BX, 2 ; 移动到下一个元素
+    LOOP_START:
+        MAX_VALUE AX, [BX]
+        ADD BX, 2
+        LOOP LOOP_START
+    
+    ; 将最大值存储在MAX单元中
+    MOV BX, OFFSET MAX
+    MOV [BX], AX
+    
+    ; 显示最大值
+    MOV AH, 2
+    MOV DL, ' '
+    INT 21H
+    MOV AX, [BX]
+    CALL DISPLAY_NUMBER
+    
+    MOV AX, 4C00H
+    INT 21H
+
+MAIN ENDP
+
+; 显示一个十六进制数
+DISPLAY_NUMBER PROC
+    PUSH AX
+    PUSH BX
+    PUSH CX
+    PUSH DX
+    
+    MOV CX, 4 ; 一个字有4个十六进制位
+    MOV BX, 10 ; 除数为10，用于将数值转换为十六进制字符
+    MOV DX, 0
+    
+    DISPLAY_LOOP:
+        XOR DX, DX
+        DIV BX ; 除法运算，商存入AX，余数存入DX
+        ADD DL, '0' ; 将余数转换为字符
+        PUSH DX ; 将余数入栈，以便逆序打印
+        DEC CX
+        TEST AX, AX
+        JNZ DISPLAY_LOOP
+    
+    PRINT_LOOP:
+        POP DX ; 弹出余数
+        MOV AH, 2 ; 显示字符的系统调用
+        INT 21H
+        LOOP PRINT_LOOP
+    
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+    
+    RET
+DISPLAY_NUMBER ENDP
+
+END MAIN
