@@ -1,0 +1,13 @@
+rp=3;
+rs=15;
+fs=1000;
+wp=2*pi*400/fs;
+ws=2*pi*200/fs;
+wp2=2*tan(wp/2)*fs;
+ws2=2*tan(ws/2)*fs;
+[n,omgc]=buttord(wp2,ws2,rp,rs,'s');
+[b,a]=butter(n,omgc,'high','s');
+[bz,az]=bilinear(b,a,fs);
+[H,w]=freqz(bz,az,fs);
+subplot(2,1,1),plot(w/pi,abs(H));
+subplot(2,1,2),plot(w/pi,angle(H));

@@ -1,0 +1,17 @@
+fc1 = 10;
+fc2 = 20;
+fs = 100; 
+[n, Wn, beta, ftype] = kaiserord([7 13 17 23], [0 1 0], [0.01 0.01 0.01], fs);
+w1 = 2 * fc1 / fs;
+w2 = 2 * fc2 / fs;
+window = kaiser(n + 1, beta);
+b = fir1(n, [w1 w2], window);
+freqz(b, 1, 512);
+t = (0:100) / fs;
+s = sin(2 * pi * t * 5) + sin(2 * pi * t * 15) + sin(2 * pi * t * 30);
+sf = filter(b, 1, s);
+figure;
+subplot(2, 1, 1);
+plot(t, s);
+subplot(2, 1, 2);
+plot(t, sf);

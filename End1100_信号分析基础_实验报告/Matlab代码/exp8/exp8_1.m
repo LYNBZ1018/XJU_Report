@@ -1,0 +1,15 @@
+wp=0.2*pi;
+ws=0.3*pi;
+rp=1;
+rs=15;
+fs=10000;
+omgp=wp*fs;
+omgs=ws*fs;
+[n,omgc]=buttord(omgp,omgs,rp,rs,'s');
+[z,p,k]=buttap(n);
+[bap,aap]=zp2tf(z,p,k);
+[ba,aa]=lp2lp(bap,aap,omgc);
+[bz,az]=impinvar(ba,aa,fs);
+[H,w]=freqz(bz,az,fs);
+subplot(2,1,1),plot(w/pi,abs(H));
+subplot(2,1,2),plot(w/pi,angle(H));

@@ -1,0 +1,17 @@
+clear;
+N=10; 
+m=4; 
+n=0:1:N-1; 
+x=8*(0.4).^n; 
+n1=mod((n+m),N); 
+xm=x(n1+1); 
+subplot(2,1,1) 
+stem(n,x); 
+title('原始序列'); 
+xlabel('n'); 
+ylabel('x(n)'); 
+subplot(2,1,2) 
+stem(n,xm); 
+title('圆周移位4位后的序列');
+xlabel('n'); 
+ylabel('x((n+4))mod20');

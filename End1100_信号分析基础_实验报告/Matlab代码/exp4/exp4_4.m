@@ -1,0 +1,13 @@
+clf; 
+c=-(1/12)+(pi/6)*i; 
+K=2; 
+n=0:40; 
+x=K*exp(c*n); 
+subplot(2,1,1); 
+stem(n,real(x)); 
+ylabel('幅值f(k)'); 
+title('实部'); 
+subplot(2,1,2); 
+stem(n,imag(x)); 
+xlabel('时间(k)'); ylabel('幅值f(k)'); 
+title('虚部');

@@ -1,0 +1,19 @@
+clear all
+fs=32;
+N=fs;
+n=0:N-1;
+f1=1;f2=2;f3=3;
+xn=0.15*sin(2*pi*f1*n/fs)+sin(2*pi*f2*n/fs)-0.1*sin(2*pi*f3*n/fs);XK=fft(xn,N);
+magXK=abs(XK);
+phaXK=angle(XK); 
+subplot(1,2,1)
+stem(n,xn,'.');
+xlabel('n');ylabel('x(n)');
+axis([0,32,-1.2,1.2]);
+grid;
+subplot(1,2,2)
+k=0:length(magXK)-1;
+stem(k,magXK,'.');
+xlabel('k');ylabel('│X(k)│');
+axis([0,32,0,17]);
+grid

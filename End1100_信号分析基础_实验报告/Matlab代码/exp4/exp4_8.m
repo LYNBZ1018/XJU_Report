@@ -1,0 +1,12 @@
+clf;
+R=51;
+d=0.8*(rand(R,1) - 0.5);
+m=0:R-1;
+subplot(1,2,1);
+stem (m,d,'b');
+title('随机序列');
+xlabel('k'); ylabel('f(k)');
+subplot(1,2,2);
+plot(m,d);
+title('随机序列 折线图');
+xlabel('k'); ylabel('f(k)');
